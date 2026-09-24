@@ -1,0 +1,214 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+
+  --color-navy-50: #f2f5fa;
+  --color-navy-100: #e3e9f3;
+  --color-navy-200: #c3cfe3;
+  --color-navy-300: #94a8c9;
+  --color-navy-400: #6480ae;
+  --color-navy-500: #43609a;
+  --color-navy-600: #2f4a80;
+  --color-navy-700: #233a68;
+  --color-navy-800: #162a50;
+  --color-navy-900: #0e1d3a;
+  --color-navy-950: #071226;
+
+  --color-gold-50: #fbf7ee;
+  --color-gold-100: #f5ecd6;
+  --color-gold-200: #eeddb5;
+  --color-gold-300: #e4cb8f;
+  --color-gold-400: #d6b46c;
+  --color-gold-500: #c69c4e;
+  --color-gold-600: #aa813a;
+  --color-gold-700: #86632e;
+  --color-gold-800: #6b4f27;
+  --color-gold-900: #584123;
+
+  --color-graphite-50: #f6f7f8;
+  --color-graphite-100: #eceef0;
+  --color-graphite-200: #d5d8dd;
+  --color-graphite-300: #b2b7bf;
+  --color-graphite-400: #8a909b;
+  --color-graphite-500: #646b77;
+  --color-graphite-600: #4d535e;
+  --color-graphite-700: #3a3f48;
+  --color-graphite-800: #262a31;
+  --color-graphite-900: #16181d;
+
+  --color-ivory: #f8f6f1;
+  --color-sand: #efe9dd;
+
+  --shadow-soft: 0 1px 2px rgb(7 18 38 / 0.04), 0 12px 32px -14px rgb(7 18 38 / 0.16);
+  --shadow-lift: 0 2px 6px rgb(7 18 38 / 0.05), 0 30px 60px -22px rgb(7 18 38 / 0.32);
+  --shadow-gold: 0 10px 26px -10px rgb(198 156 78 / 0.7), inset 0 1px 0 rgb(255 255 255 / 0.45);
+
+  --animate-rise: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-fade: fade 0.3s ease both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--color-ivory);
+    color: var(--color-graphite-800);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  button:not(:disabled),
+  [role="button"] {
+    cursor: pointer;
+  }
+  ::selection {
+    background: var(--color-gold-300);
+    color: var(--color-navy-950);
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+@utility container-kh {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility kh-gold-text {
+  background-image: linear-gradient(100deg, #f3e6c2 0%, #d6b46c 45%, #f3e6c2 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility kh-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.55) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.55) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ---------- Leaflet — KeyHouse skin ---------- */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: #eef1f5;
+  z-index: 0;
+}
+.kh-icon {
+  background: transparent;
+  border: 0;
+}
+.kh-pin {
+  position: relative;
+  display: inline-block;
+  transform: translate(-50%, calc(-100% - 8px));
+  white-space: nowrap;
+  background: #071226;
+  color: #fff;
+  border: 1.5px solid #d6b46c;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 18px -6px rgb(7 18 38 / 0.55);
+  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+}
+.kh-pin::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 9px;
+  height: 9px;
+  background: inherit;
+  border-right: 1.5px solid #d6b46c;
+  border-bottom: 1.5px solid #d6b46c;
+  transform: translateX(-50%) rotate(45deg);
+}
+.kh-pin.active,
+.kh-pin:hover {
+  background: #d6b46c;
+  color: #071226;
+  border-color: #071226;
+}
+.kh-pin.active::after,
+.kh-pin:hover::after {
+  border-color: #071226;
+}
+.kh-dot {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: #d6b46c;
+  border: 4px solid #071226;
+  box-shadow: 0 0 0 8px rgb(214 180 108 / 0.28);
+}
+.leaflet-control-attribution {
+  font-size: 10px !important;
+}
+.leaflet-bar a {
+  color: #071226 !important;
+}
+
+/* ---------- Print: only the contract ---------- */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible !important;
+  }
+  .print-area {
+    position: absolute;
+    inset: 0;
+    padding: 32px;
+  }
+}

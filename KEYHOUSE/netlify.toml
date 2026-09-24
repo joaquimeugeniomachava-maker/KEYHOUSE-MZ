@@ -1,0 +1,15 @@
+# KEYHOUSE PROPERTIES - configuracao automatica do Netlify
+# (Os cabecalhos HTTP estao em public/_headers, partilhados com o Cloudflare Pages.)
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Enderecos sem "#" (ex.: /imoveis) abrem a aplicacao em vez de dar erro 404
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

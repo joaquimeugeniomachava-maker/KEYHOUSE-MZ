@@ -1,0 +1,15 @@
+# Dependencias e compilacao (o Netlify gera-os sozinho)
+node_modules/
+dist/
+.netlify/
+
+# Sistema e editores
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Segredos (nunca publicar)
+.env
+.env.*

@@ -1,0 +1,8 @@
+# KEYHOUSE PROPERTIES
+# Nota: no endereço do GitHub Pages (…github.io/KEYHOUSE-MZ/) os motores de busca não leem este ficheiro,
+# porque ele não fica na raiz do domínio. Passa a funcionar com domínio próprio (ex.: keyhouse.co.mz);
+# nessa altura, actualize também o endereço do Sitemap abaixo.
+User-agent: *
+Allow: /
+
+Sitemap: https://joaquimeugeniomachava-maker.github.io/KEYHOUSE-MZ/sitemap.xml

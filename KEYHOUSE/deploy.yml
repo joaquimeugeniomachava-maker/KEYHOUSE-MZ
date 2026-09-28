@@ -1,0 +1,98 @@
+# KEYHOUSE PROPERTIES - publicacao automatica no GitHub Pages
+#
+# Funciona de duas formas:
+#   1) Projecto descompactado no repositorio (package.json visivel), ou
+#   2) So o ficheiro .zip do projecto carregado: o GitHub descompacta-o sozinho
+#      (usa sempre o ZIP carregado mais recentemente).
+#
+# Activar (uma unica vez): Configuracoes > Paginas > Fonte > "GitHub Actions"
+# Em repositorios sem GitHub Pages activo, este fluxo e ignorado (nao gera erros).
+
+name: Publicar no GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.repository.has_pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Obter o codigo
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Localizar o projecto (descompacta o ZIP se for preciso)
+        id: projecto
+        run: |
+          procurar() {
+            find "$1" -name package.json -not -path '*/node_modules/*' -not -path './.git/*' -printf '%d\t%h\n' | sort -n | head -n 1 | cut -f 2
+          }
+          DIR="$(procurar .)"
+          if [ -z "$DIR" ]; then
+            ZIP=""
+            RECENTE=-1
+            while IFS= read -r -d '' F; do
+              T="$(git log -1 --format=%ct -- "$F" 2>/dev/null || true)"
+              T="${T:-0}"
+              if [ "$T" -gt "$RECENTE" ]; then RECENTE="$T"; ZIP="$F"; fi
+            done < <(find . -type f -iname '*.zip' -not -path './.git/*' -print0)
+            if [ -z "$ZIP" ]; then
+              echo "::error::Nao encontrei o projecto. Carregue os ficheiros (com package.json) ou o ZIP do projecto."
+              exit 1
+            fi
+            echo "A descompactar: $ZIP"
+            unzip -q -o "$ZIP" -d ./_projeto
+            DIR="$(procurar ./_projeto)"
+          fi
+          if [ -z "$DIR" ]; then
+            echo "::error::O ZIP nao contem o ficheiro package.json."
+            exit 1
+          fi
+          echo "Projecto encontrado em: $DIR"
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Preparar Node.js 22
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias e compilar o site
+        working-directory: ${{ steps.projecto.outputs.dir }}
+        run: |
+          if npm install --no-audit --no-fund --replace-registry-host=always --fetch-retries=1 --fetch-timeout=60000 && npm run build; then
+            echo "Site compilado com sucesso."
+          else
+            echo "::warning::Primeira tentativa falhou. A repetir sem o package-lock.json..."
+            rm -rf node_modules package-lock.json dist
+            npm install --no-audit --no-fund
+            npm run build
+          fi
+
+      - name: Configurar o GitHub Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+
+      - name: Enviar a pasta dist
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: ${{ steps.projecto.outputs.dir }}/dist
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5

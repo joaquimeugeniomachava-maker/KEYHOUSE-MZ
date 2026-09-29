@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  KEYHOUSE PROPERTIES — mapa do site para o Google Search Console.
+  Só a página principal: as páginas internas (#/imoveis, #/imovel/…) usam endereços com "#",
+  que o Google não indexa separadamente. De propósito, os imóveis de demonstração ficam fora do Google.
+  Ao mudar para domínio próprio, actualize o endereço abaixo.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://joaquimeugeniomachava-maker.github.io/KEYHOUSE-MZ/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

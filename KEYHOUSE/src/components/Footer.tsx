@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, MessageCircle, ShieldCheck } from 'lucide-react';
 import Logo from './Logo';
+import { ContactLink } from './ui';
 import { BRAND } from '../lib/constants';
 
 const COLS = [
@@ -12,6 +13,8 @@ const COLS = [
       ['Comercial & escritórios', '/imoveis?categoria=comercial'],
       ['Terrenos & praia', '/imoveis?categoria=terrenos'],
       ['Turismo & investimento', '/imoveis?categoria=investimento'],
+      ['Terrenos de praia · Macaneta a Vilankulo', '/praias'],
+      ['Procura-se · pedidos de clientes', '/procura'],
     ],
   },
   {
@@ -66,17 +69,19 @@ export default function Footer() {
               <div className="flex items-center gap-2.5">
                 <MapPin className="h-4 w-4 text-gold-400" /> {BRAND.address}
               </div>
-              <a
+              <ContactLink
+                official
+                newTab
                 href={`https://wa.me/${BRAND.whatsapp}`}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2.5 hover:text-white"
+                className="flex items-center gap-2.5 text-left hover:text-white"
               >
-                <MessageCircle className="h-4 w-4 text-gold-400" /> WhatsApp {BRAND.whatsappDisplay}
-              </a>
-              <a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 hover:text-white">
-                <Mail className="h-4 w-4 text-gold-400" /> {BRAND.email}
-              </a>
+                <MessageCircle className="h-4 w-4 text-gold-400" /> WhatsApp {BRAND.whatsappDisplay || '· em breve'}
+              </ContactLink>
+              {BRAND.email && (
+                <a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 hover:text-white">
+                  <Mail className="h-4 w-4 text-gold-400" /> {BRAND.email}
+                </a>
+              )}
             </div>
           </div>
           {COLS.map((c) => (

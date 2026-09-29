@@ -179,3 +179,43 @@ export interface Toast {
   message: string;
   tone: 'success' | 'info' | 'error';
 }
+
+/* ---------- Procura-se: pedidos de clientes (procura inversa) ---------- */
+export type DemandPurpose = 'Arrendamento' | 'Compra';
+export type DemandStatus = 'ativo' | 'em_validacao' | 'fechado';
+
+export interface Demand {
+  id: string; // ex.: PED-0001
+  title: string;
+  purpose: DemandPurpose;
+  types: string[]; // tipos de espaço aceites
+  city: string;
+  zone: string; // bairro / referência
+  minArea: number; // m² (0 = indiferente)
+  budget: number | null; // null = negociável / a combinar
+  currency: Currency;
+  negotiable: boolean;
+  use: string; // uso pretendido
+  requirements: string[];
+  description: string;
+  timeline: string; // id de TIMELINES ou ''
+  clientName: string;
+  clientPhone: string; // protegido: nunca é mostrado publicamente
+  status: DemandStatus;
+  createdAt: string;
+  mine?: boolean;
+}
+
+export interface DemandProposal {
+  id: string;
+  demandId: string;
+  name: string;
+  spaceType: string;
+  location: string;
+  mapLink: string;
+  area: number;
+  price: number;
+  negotiable: boolean;
+  notes: string;
+  createdAt: string;
+}

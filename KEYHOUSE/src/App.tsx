@@ -12,6 +12,8 @@ import PropertyDetail from './pages/PropertyDetail';
 import Publish from './pages/Publish';
 import Payment from './pages/Payment';
 import Pricing from './pages/Pricing';
+import Demands from './pages/Demands';
+import BeachLand from './pages/BeachLand';
 import Dashboard from './pages/Dashboard';
 import ClientArea from './pages/ClientArea';
 import OwnerArea from './pages/OwnerArea';
@@ -70,6 +72,8 @@ export default function App() {
               <Route path="/publicar" element={<Publish />} />
               <Route path="/pagamento" element={<PaymentRoute />} />
               <Route path="/planos" element={<Pricing />} />
+              <Route path="/procura" element={<Demands />} /> {/* Procura-se */}
+              <Route path="/praias" element={<BeachLand />} /> {/* Colecção Praias */}
               <Route path="/painel" element={<Dashboard />} />
               <Route path="/cliente" element={<ClientArea />} />
               <Route path="/proprietario" element={<OwnerArea />} />

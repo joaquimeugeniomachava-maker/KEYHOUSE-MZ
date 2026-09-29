@@ -2,6 +2,7 @@ import { useEffect, useRef, type ReactNode, type SelectHTMLAttributes } from 're
 import { BadgeCheck, Check, ChevronDown, CircleCheck, Info, Star, TriangleAlert, X } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useStore } from '../store/store';
+import { BRAND, DEMO_MODE } from '../lib/constants';
 
 /* ---------------- Botões ---------------- */
 export type BtnVariant = 'gold' | 'navy' | 'outline' | 'ghost' | 'white' | 'glass';
@@ -71,6 +72,8 @@ const STATUS: Record<string, [string, string]> = {
   reembolsado: ['Reembolsado', 'bg-graphite-100 text-graphite-600 ring-graphite-200'],
   em_curso: ['Em curso', 'bg-sky-50 text-sky-700 ring-sky-200'],
   concluido: ['Concluído', 'bg-emerald-50 text-emerald-700 ring-emerald-200'],
+  ativo: ['Activo', 'bg-emerald-50 text-emerald-700 ring-emerald-200'],
+  fechado: ['Encontrado', 'bg-navy-50 text-navy-700 ring-navy-200'],
 };
 
 export function StatusPill({ status, className }: { status: string; className?: string }) {
@@ -474,6 +477,51 @@ export function EmptyState({
       <p className="mx-auto mt-1.5 max-w-md text-sm text-graphite-500">{text}</p>
       {action && <div className="mt-6 flex justify-center">{action}</div>}
     </div>
+  );
+}
+
+/* ---------------- Contactos seguros (modo demonstração) ---------------- */
+export function ContactLink({
+  href,
+  official = false,
+  newTab = false,
+  onClick,
+  className,
+  children,
+}: {
+  href: string;
+  /** true = contacto oficial da KEYHOUSE (BRAND.whatsapp); false = contacto de imóvel, lead ou visita */
+  official?: boolean;
+  newTab?: boolean;
+  onClick?: () => void;
+  className?: string;
+  children: ReactNode;
+}) {
+  const { notify } = useStore();
+  const blocked = official ? !BRAND.whatsapp : DEMO_MODE;
+  if (blocked) {
+    return (
+      <button
+        type="button"
+        className={className}
+        onClick={() => {
+          onClick?.();
+          notify(
+            official
+              ? 'O WhatsApp oficial da KEYHOUSE está a ser configurado. Volte em breve.'
+              : 'Modo demonstração: este contacto é fictício — nenhuma chamada ou mensagem foi feita.',
+            'info',
+          );
+        }}
+      >
+        {children}
+      </button>
+    );
+  }
+  return (
+    <a href={href} target={newTab ? '_blank' : undefined} rel={newTab ? 'noreferrer' : undefined} onClick={onClick} className={className}>
+      {children}
+    </a>
   );
 }
 

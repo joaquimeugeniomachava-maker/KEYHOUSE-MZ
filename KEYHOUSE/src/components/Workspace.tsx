@@ -17,15 +17,17 @@ import {
   Wallet,
   Building,
   Video,
+  Download,
 } from 'lucide-react';
 import type { Property, Visit } from '../lib/types';
 import { useStore } from '../store/store';
-import { EmptyState, ScoreRing, StatCard, StatusPill, Tabs, VerifiedBadge, btn, inputCls } from './ui';
+import { ContactLink, EmptyState, ScoreRing, StatCard, StatusPill, Tabs, VerifiedBadge, btn, inputCls } from './ui';
 import ContractModal from './ContractModal';
 import { BROKER_SHARE, BUY_PAYMENT, PRODUCTS, RENT_PAYMENT, TIMELINES, VAT } from '../lib/constants';
 import { FALLBACK_IMG } from '../data/images';
 import {
   cn,
+  downloadCSV,
   formatDate,
   formatMT,
   formatMoney,
@@ -117,6 +119,26 @@ export default function Workspace({ advertiserId, variant }: { advertiserId: str
   const pendingBroker = deals.filter((d) => d.status === 'minuta').reduce((a, d) => a + d.brokerShareMZN, 0);
   const paidBroker = deals.filter((d) => d.status === 'pago').reduce((a, d) => a + d.brokerShareMZN, 0);
   const newLeads = leads.filter((l) => !l.feePaid).length;
+
+  /** Exporta os leads para Excel / Google Sheets / CRM. O contacto completo só sai nos leads aceites (pagos). */
+  const exportLeads = () => {
+    downloadCSV(`keyhouse-leads-${new Date().toISOString().slice(0, 10)}.csv`, [
+      ['Data', 'Imóvel', 'Nome', 'Telefone', 'Orçamento', 'Prazo', 'Pagamento', 'Zona', 'Pontuação', 'Estado'],
+      ...leads.map((l) => [
+        formatDate(l.createdAt),
+        propOf(l.propertyId)?.title ?? l.propertyId,
+        l.feePaid ? l.name : maskName(l.name),
+        l.feePaid ? l.phone : maskPhone(l.phone),
+        formatMoney(l.budget, l.currency),
+        TIMELINES.find((t) => t.id === l.timeline)?.label ?? '—',
+        [...BUY_PAYMENT, ...RENT_PAYMENT].find((x) => x.id === l.payment)?.label ?? '—',
+        l.zone,
+        l.score,
+        l.feePaid ? 'Aceite' : 'Por aceitar',
+      ]),
+    ]);
+    s.notify('Leads exportados. Abra no Excel ou importe no Google Sheets / no seu CRM.');
+  };
 
   const tabs =
     variant === 'broker'
@@ -251,6 +273,15 @@ export default function Workspace({ advertiserId, variant }: { advertiserId: str
               text="Os leads aparecem aqui assim que um cliente passa a qualificação (orçamento, prazo e capacidade financeira)."
             />
           ) : (
+            <div>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-graphite-500">
+                  O contacto completo só é libertado nos leads aceites. Os restantes seguem protegidos.
+                </p>
+                <button onClick={exportLeads} className={btn('outline', 'sm')}>
+                  <Download className="h-4 w-4" /> Exportar leads (Excel / CRM)
+                </button>
+              </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {leads.map((l) => {
                 const p = propOf(l.propertyId);
@@ -293,14 +324,13 @@ export default function Workspace({ advertiserId, variant }: { advertiserId: str
                     </dl>
                     <div className="mt-4 flex gap-2">
                       {paid ? (
-                        <a
+                        <ContactLink
+                          newTab
                           href={waLink(l.phone, `Olá ${l.name.split(' ')[0]}! Obrigado pelo interesse no imóvel "${p?.title ?? ''}" na KEYHOUSE PROPERTIES.`)}
-                          target="_blank"
-                          rel="noreferrer"
                           className={btn('navy', 'sm', 'flex-1')}
                         >
                           <MessageCircle className="h-4 w-4" /> Falar no WhatsApp
-                        </a>
+                        </ContactLink>
                       ) : (
                         <>
                           <Link to={`/pagamento?itens=lead&ref=${l.id}`} className={btn('gold', 'sm', 'flex-1')}>
@@ -321,6 +351,7 @@ export default function Workspace({ advertiserId, variant }: { advertiserId: str
                   </div>
                 );
               })}
+            </div>
             </div>
           ))}
 
@@ -379,15 +410,14 @@ export default function Workspace({ advertiserId, variant }: { advertiserId: str
                       )}
                       {v.status === 'confirmada' && (
                         <>
-                          <a
+                          <ContactLink
+                            newTab
                             href={waLink(v.clientPhone, reminder)}
-                            target="_blank"
-                            rel="noreferrer"
                             onClick={() => s.updateVisit(v.id, { reminderSent: true })}
                             className={btn('outline', 'sm')}
                           >
                             <MessageCircle className="h-4 w-4" /> Lembrete WhatsApp
-                          </a>
+                          </ContactLink>
                           <button
                             onClick={() => {
                               s.updateVisit(v.id, { status: 'realizada' });

@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Headphones, Heart, LayoutGrid, Map as MapIcon, SearchX, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowRight, Headphones, Heart, LayoutGrid, Map as MapIcon, SearchX, SlidersHorizontal, TreePalm, X } from 'lucide-react';
 import { useStore } from '../store/store';
 import { useTitle } from '../hooks/useTitle';
 import PropertyCard from '../components/PropertyCard';
@@ -290,6 +290,24 @@ export default function SearchPage() {
             </span>
             <span className="hidden sm:inline">Anúncios em destaque aparecem primeiro no seu bairro</span>
           </div>
+
+          {(filters.tipo === 'Terreno na praia' ||
+            filters.categoria === 'terrenos' ||
+            ['Marracuene', 'Inhambane', 'Jangamo', 'Vilankulo'].includes(filters.cidade)) && (
+            <Link
+              to="/praias"
+              className="mb-5 flex items-center gap-4 rounded-2xl bg-navy-950 p-4 text-white ring-1 ring-gold-400/20 transition hover:ring-gold-400/60"
+            >
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gold-400/15 text-gold-300">
+                <TreePalm className="h-5 w-5" />
+              </span>
+              <span className="flex-1 text-sm text-white/80">
+                <b className="text-white">Colecção Praias:</b> terrenos de 1 a 50 ha na Macaneta, Barra, Jangamo, Tofo e Vilankulo, a preços de
+                oportunidade.
+              </span>
+              <ArrowRight className="h-5 w-5 shrink-0 text-gold-300" />
+            </Link>
+          )}
 
           {results.length === 0 ? (
             <EmptyState

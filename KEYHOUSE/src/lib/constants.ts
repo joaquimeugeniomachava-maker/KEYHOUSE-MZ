@@ -3,11 +3,22 @@ import type { Currency, PaymentMethod, ProductCode, Role } from './types';
 export const BRAND = {
   name: 'KEYHOUSE PROPERTIES',
   short: 'KEYHOUSE',
-  whatsapp: '258840000000',
-  whatsappDisplay: '+258 84 000 0000',
-  email: 'concierge@keyhouse.co.mz',
+  /** WhatsApp OFICIAL da KEYHOUSE — só dígitos, com 258 à frente (ex.: '258841234567'). Vazio = ainda por configurar. */
+  whatsapp: '',
+  /** Como o número aparece no rodapé (ex.: '+258 84 123 4567'). */
+  whatsappDisplay: '',
+  /** Email oficial (ex.: 'geral@keyhouse.co.mz'). Vazio = não aparece no site. */
+  email: '',
   address: 'Av. Julius Nyerere, Polana — Maputo',
 };
+
+/**
+ * MODO DEMONSTRAÇÃO — os contactos dos imóveis, leads e visitas de exemplo são fictícios.
+ * Enquanto estiver `true`, os botões de telefone/WhatsApp desses contactos mostram um aviso
+ * em vez de ligar ou enviar mensagem (evita incomodar números reais de terceiros).
+ * Mudar para `false` só quando os imóveis e os contactos forem reais.
+ */
+export const DEMO_MODE = true;
 
 export const DEMO_USER = { name: 'Ana Matsinhe', phone: '+258 84 555 0101', email: 'ana.matsinhe@email.co.mz' };
 
@@ -84,6 +95,7 @@ export const CITIES = [
   'Beira',
   'Nampula',
   'Inhambane',
+  'Jangamo',
   'Vilankulo',
   'Ponta do Ouro',
   'Bilene',
@@ -102,6 +114,7 @@ export const CITY_COORDS: Record<string, [number, number]> = {
   Beira: [-19.8436, 34.8389],
   Nampula: [-15.1165, 39.2666],
   Inhambane: [-23.865, 35.3833],
+  Jangamo: [-24.085, 35.51],
   Vilankulo: [-21.995, 35.316],
   'Ponta do Ouro': [-26.843, 32.896],
   Bilene: [-25.283, 33.238],
@@ -132,10 +145,11 @@ export const NEIGHBORHOODS: Record<string, string[]> = {
     'Zimpeto',
   ],
   Matola: ['Matola Rio', 'Machava', 'Fomento', 'Liberdade', 'Tchumene', 'Matola Gare', 'Sikwama'],
-  Marracuene: ['Vila de Marracuene', 'Bobole', 'Michafutene', 'Ricatla'],
+  Marracuene: ['Vila de Marracuene', 'Macaneta', 'Kumbeza', 'Michafutene', 'Bobole', 'Ricatla', 'Mumemo', 'Santa Isabel'],
   Beira: ['Ponta Gêa', 'Macuti', 'Palmeiras', 'Esturro', 'Manga'],
   Nampula: ['Central', 'Muahivire', 'Mutauanha', 'Namicopo'],
-  Inhambane: ['Tofo', 'Barra', 'Cidade Baixa', 'Guinjata'],
+  Inhambane: ['Tofo', 'Barra', 'Tofinho', 'Cidade Baixa'],
+  Jangamo: ['Guinjata', 'Paindane', 'Praia de Jangamo'],
   Vilankulo: ['Praia de Vilankulo', 'Chibuene', 'Bairro Central'],
   'Ponta do Ouro': ['Ponta do Ouro', 'Ponta Malongane', 'Ponta Mamoli'],
   Bilene: ['Praia do Bilene', 'Vila do Bilene'],
@@ -307,6 +321,36 @@ export const RENT_PAYMENT = [
 ];
 
 export const TIME_SLOTS = ['09:00', '10:30', '12:00', '14:00', '15:30', '17:00'];
+
+/** Procura-se: tipos de espaço que um cliente pode pedir (lista livre, separada dos 20 tipos de anúncio) */
+export const DEMAND_SPACE_TYPES = [
+  'Apartamento',
+  'Moradia',
+  'Casa geminada',
+  'Quarto',
+  'Dependência',
+  'Quintal',
+  'Terreno',
+  'Terreno vedado',
+  'Quinta',
+  'Loja',
+  'Escritório',
+  'Armazém',
+  'Espaço comercial',
+  'Estaleiro',
+  'Espaço com infraestrutura adaptável',
+];
+
+export const DEMAND_REQUIREMENTS = [
+  'Vedado',
+  'Água',
+  'Energia',
+  'Bom acesso',
+  'Segurança',
+  'Estacionamento',
+  'Mobilado',
+  'Documentação em dia',
+];
 
 export const REJECTION_REASONS = [
   'Fotografias de baixa qualidade ou não reais',

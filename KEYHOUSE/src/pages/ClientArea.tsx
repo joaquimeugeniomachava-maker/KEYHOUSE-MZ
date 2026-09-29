@@ -17,7 +17,7 @@ import {
 import { useStore } from '../store/store';
 import { useTitle } from '../hooks/useTitle';
 import PropertyCard from '../components/PropertyCard';
-import { EmptyState, PageHeader, StatusPill, Tabs, btn } from '../components/ui';
+import { ContactLink, EmptyState, PageHeader, StatusPill, Tabs, btn } from '../components/ui';
 import { DEMO_USER, METHOD_LABEL } from '../lib/constants';
 import { FALLBACK_IMG } from '../data/images';
 import { cn, downloadICS, formatDate, formatDateTime, formatMT, priceLabel, relativeTime, waLink } from '../lib/utils';
@@ -135,17 +135,16 @@ export default function ClientArea() {
                             {confirmed ? (
                               <div className="mt-4 flex flex-wrap items-center gap-2 rounded-2xl bg-emerald-50 p-3 text-sm ring-1 ring-emerald-200">
                                 <span className="font-semibold text-emerald-800">Contacto libertado:</span>
-                                <a href={`tel:${p.advertiser.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-1 font-bold text-navy-950">
+                                <ContactLink href={`tel:${p.advertiser.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-1 font-bold text-navy-950">
                                   <Phone className="h-3.5 w-3.5" /> {p.advertiser.phone}
-                                </a>
-                                <a
+                                </ContactLink>
+                                <ContactLink
+                                  newTab
                                   href={waLink(p.advertiser.phone, `Olá! Confirmo a visita a "${p.title}" no dia ${formatDate(v.date)} às ${v.time}.`)}
-                                  target="_blank"
-                                  rel="noreferrer"
                                   className="ml-auto inline-flex items-center gap-1 text-xs font-bold text-emerald-700"
                                 >
                                   <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
-                                </a>
+                                </ContactLink>
                               </div>
                             ) : (
                               <div className="mt-4 flex items-center gap-2 text-xs text-graphite-500">
@@ -231,12 +230,12 @@ export default function ClientArea() {
                       <div className="truncate text-xs text-graphite-500">{p.title}</div>
                       <div className="mt-1 font-bold text-navy-950">{p.advertiser.name}</div>
                       <div className="mt-3 flex gap-2">
-                        <a href={`tel:${p.advertiser.phone.replace(/\s/g, '')}`} className={btn('navy', 'sm', 'flex-1')}>
+                        <ContactLink href={`tel:${p.advertiser.phone.replace(/\s/g, '')}`} className={btn('navy', 'sm', 'flex-1')}>
                           <Phone className="h-4 w-4" /> {p.advertiser.phone}
-                        </a>
-                        <a href={waLink(p.advertiser.phone, `Olá! Vi o imóvel "${p.title}" na KEYHOUSE.`)} target="_blank" rel="noreferrer" className={btn('outline', 'sm')}>
+                        </ContactLink>
+                        <ContactLink newTab href={waLink(p.advertiser.phone, `Olá! Vi o imóvel "${p.title}" na KEYHOUSE.`)} className={btn('outline', 'sm')}>
                           <MessageCircle className="h-4 w-4" />
-                        </a>
+                        </ContactLink>
                       </div>
                     </div>
                   ))}

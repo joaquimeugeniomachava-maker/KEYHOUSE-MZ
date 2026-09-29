@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import type { Currency, Lead, Property, Visit } from '../lib/types';
 import { useStore } from '../store/store';
-import { Field, Modal, ScoreRing, Segmented, Select, btn, inputCls } from './ui';
+import { ContactLink, Field, Modal, ScoreRing, Segmented, Select, btn, inputCls } from './ui';
 import PropertyCard from './PropertyCard';
 import {
   BRAND,
@@ -505,9 +505,9 @@ export default function QualificationModal({
               {waText}
             </div>
             <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
-              <a href={waLink(BRAND.whatsapp, waText)} target="_blank" rel="noreferrer" className={btn('outline')}>
+              <ContactLink official newTab href={waLink(BRAND.whatsapp, waText)} className={btn('outline')}>
                 <MessageCircle className="h-4 w-4" /> Abrir no WhatsApp
-              </a>
+              </ContactLink>
               <button
                 onClick={() => {
                   onClose();

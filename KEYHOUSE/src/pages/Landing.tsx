@@ -5,20 +5,20 @@ import {
   ArrowUpRight,
   BadgeCheck,
   Banknote,
+  Briefcase,
   Building,
   CalendarCheck,
   Check,
   FileText,
   Globe,
   Headphones,
+  House,
   Lock,
   MapPin,
   Megaphone,
   Plane,
-  Quote,
   Search,
   ShieldCheck,
-  Star,
   Target,
   Video,
 } from 'lucide-react';
@@ -29,6 +29,7 @@ import { SectionHeading, VerifiedBadge, btn } from '../components/ui';
 import { PaymentBadges } from '../components/Footer';
 import { TYPE_ICON } from '../components/typeIcons';
 import { IMG } from '../data/images';
+import { BEACH_RANGE, BEACH_ZONES } from '../data/beach';
 import { CITIES, NEIGHBORHOODS, PROPERTY_TYPES } from '../lib/constants';
 import { applyFilters, describeFilters, parseFilters } from '../lib/search';
 import type { Property } from '../lib/types';
@@ -218,11 +219,13 @@ function Hero() {
 }
 
 function TrustBar() {
+  // Factos verificáveis da plataforma (sem números de tracção inventados).
+  // Quando houver resultados reais (imóveis, clientes, avaliações), substitua aqui.
   const stats = [
-    ['2.400+', 'imóveis verificados'],
-    ['18.000', 'clientes qualificados'],
-    ['72h', 'até à primeira visita'],
-    ['4,9/5', 'satisfação dos clientes'],
+    ['27', 'pontos de verificação por anúncio'],
+    ['20', 'tipos de imóvel'],
+    ['60 s', 'para qualificar um cliente'],
+    ['24 h', 'para validar um anúncio'],
   ];
   return (
     <section className="border-y border-gold-400/15 bg-navy-950">
@@ -233,6 +236,67 @@ function TrustBar() {
             <div className="mt-1 text-[13px] font-medium text-white/60">{l}</div>
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function BeachCollection() {
+  return (
+    <section className="relative overflow-hidden bg-navy-950 py-20 text-white sm:py-28">
+      <div className="kh-grid absolute inset-0 opacity-[.04]" />
+      <div className="absolute -right-32 top-10 h-96 w-96 rounded-full bg-gold-500/10 blur-3xl" />
+      <div className="container-kh relative">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <SectionHeading
+            light
+            eyebrow="Colecção Praias · Maputo e Inhambane"
+            title={
+              <>
+                Terrenos de praia de{' '}
+                <em className="kh-gold-text font-serif font-semibold italic">
+                  {BEACH_RANGE.minHa} a {BEACH_RANGE.maxHa} hectares
+                </em>
+              </>
+            }
+            subtitle="Macaneta, Barra, Jangamo, Tofo e Vilankulo, a preços de oportunidade. O DUAT e a posição face à faixa legal dos 100 m são confirmados antes de cada visita."
+          />
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+            <Link to="/praias" className={btn('gold', 'lg')}>
+              Ver a colecção <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link to="/praias#pedir-lista" className={btn('glass', 'lg')}>
+              Pedir lista
+            </Link>
+          </div>
+        </div>
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          {BEACH_ZONES.map((z) => (
+            <Link
+              key={z.id}
+              to={`/praias?zona=${z.id}#zona-${z.id}`}
+              className="group relative h-80 overflow-hidden rounded-3xl bg-navy-900"
+            >
+              <img
+                src={z.image}
+                alt={`${z.name}, imagem ilustrativa da região`}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-navy-950/90 via-navy-950/20 to-transparent" />
+              <span className="absolute left-3 top-3 rounded-full bg-navy-950/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[.12em] text-white/90 backdrop-blur">
+                Imagem ilustrativa
+              </span>
+              <div className="absolute inset-x-0 bottom-0 p-5">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[.16em] text-gold-300">
+                  <MapPin className="h-3.5 w-3.5" /> {z.district}
+                </div>
+                <div className="mt-1 text-2xl font-extrabold tracking-tight">{z.name}</div>
+                <div className="mt-1 text-sm text-white/70">{z.tagline}</div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -449,6 +513,38 @@ function TypesGrid() {
   );
 }
 
+function DemandCTA() {
+  return (
+    <section className="pb-4 pt-20 sm:pt-24">
+      <div className="container-kh">
+        <div className="relative overflow-hidden rounded-[2rem] bg-navy-950 p-8 text-white sm:p-12">
+          <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-gold-500/15 blur-3xl" />
+          <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="text-[11px] font-bold uppercase tracking-[.25em] text-gold-300">Procura-se</div>
+              <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+                Não encontrou? <em className="kh-gold-text font-serif font-semibold italic">Diga-nos o que procura.</em>
+              </h2>
+              <p className="mt-4 text-white/70">
+                Casa, terreno, armazém ou espaço para o seu negócio. Proprietários e intermediários enviam-nos propostas, e nós
+                apresentamos-lhe só as que servem. O seu contacto fica protegido.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <Link to="/procura?novo=1" className={btn('gold', 'lg')}>
+                <Megaphone className="h-4 w-4" /> Publicar pedido · grátis
+              </Link>
+              <Link to="/procura" className={btn('glass', 'lg')}>
+                Ver pedidos de clientes <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Diaspora() {
   return (
     <section className="py-20 sm:py-28">
@@ -495,22 +591,33 @@ function Diaspora() {
   );
 }
 
-function Testimonials() {
+/**
+ * "Para quem é" — benefícios por perfil.
+ * Substitui os testemunhos de exemplo: quando houver clientes reais (com autorização),
+ * os testemunhos verdadeiros entram aqui.
+ */
+function Profiles() {
   const items = [
     {
-      quote: 'Em duas semanas recebi seis leads qualificados e arrendei o meu T3 na Polana. Zero curiosos, zero chamadas às 23h.',
-      name: 'Hélder M.',
-      role: 'Proprietário · Maputo',
+      icon: House,
+      role: 'Para proprietários',
+      title: 'Arrende sem curiosos.',
+      text: 'Receba apenas leads com orçamento e prazo confirmados. O seu contacto só é partilhado depois de a visita estar confirmada.',
+      cta: { label: 'Publicar imóvel', to: '/publicar' },
     },
     {
-      quote: 'Comprámos a casa na Matola a partir de Joanesburgo. O Concierge tratou de tudo — das visitas por vídeo à minuta.',
-      name: 'Luísa T.',
-      role: 'Cliente na diáspora · África do Sul',
+      icon: Plane,
+      role: 'Para a diáspora',
+      title: 'Compre à distância, com segurança.',
+      text: 'Visitas por videochamada, verificação do título ou DUAT e pagamento por PayPal. Acompanhe tudo online, de Lisboa a Joanesburgo.',
+      cta: { label: 'Conhecer o Concierge', to: '/planos#concierge' },
     },
     {
-      quote: 'A subscrição paga-se no primeiro fecho. O painel de comissões mudou a forma como giro a minha carteira.',
-      name: 'Edson C.',
-      role: 'Intermediário · Matola',
+      icon: Briefcase,
+      role: 'Para intermediários',
+      title: 'Mais fechos, menos corrida.',
+      text: 'Carteira, leads, visitas e comissões num só painel. Minuta de contrato e cálculo da comissão automáticos.',
+      cta: { label: 'Ver planos', to: '/planos' },
     },
   ];
   return (
@@ -518,30 +625,27 @@ function Testimonials() {
       <div className="container-kh">
         <SectionHeading
           align="center"
-          eyebrow="Prova social"
+          eyebrow="Para quem é"
           title={
             <>
-              Quem usa, <em className="font-serif font-semibold italic text-gold-600">recomenda.</em>
+              Pensado para <em className="font-serif font-semibold italic text-gold-600">cada perfil.</em>
             </>
           }
+          subtitle="Um só padrão de confiança — três formas de ganhar tempo."
         />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {items.map((t) => (
-            <figure key={t.name} className="flex flex-col rounded-3xl bg-ivory p-8 ring-1 ring-navy-900/5">
-              <Quote className="h-8 w-8 text-gold-400" />
-              <blockquote className="mt-4 flex-1 font-serif text-xl leading-snug text-navy-950">“{t.quote}”</blockquote>
-              <figcaption className="mt-6 flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-navy-950">{t.name}</div>
-                  <div className="text-xs text-graphite-500">{t.role}</div>
-                </div>
-                <div className="flex gap-0.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-gold-400 text-gold-400" />
-                  ))}
-                </div>
-              </figcaption>
-            </figure>
+            <div key={t.role} className="flex flex-col rounded-3xl bg-ivory p-8 ring-1 ring-navy-900/5">
+              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-navy-950 text-gold-300">
+                <t.icon className="h-6 w-6" />
+              </span>
+              <div className="mt-6 text-[11px] font-bold uppercase tracking-[.2em] text-gold-600">{t.role}</div>
+              <h3 className="mt-2 font-serif text-2xl font-semibold leading-snug text-navy-950">{t.title}</h3>
+              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-graphite-500">{t.text}</p>
+              <Link to={t.cta.to} className="mt-6 inline-flex items-center gap-1.5 text-sm font-bold text-navy-950 hover:text-gold-700">
+                {t.cta.label} <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           ))}
         </div>
       </div>
@@ -619,12 +723,14 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      <BeachCollection />
       <Destinations published={published} />
       <Standard />
       <HowItWorks />
       <TypesGrid />
+      <DemandCTA />
       <Diaspora />
-      <Testimonials />
+      <Profiles />
       <OwnerCTA />
     </>
   );

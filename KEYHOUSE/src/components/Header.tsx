@@ -25,6 +25,8 @@ const NAV = [
   { to: '/imoveis?finalidade=Arrendamento', label: 'Arrendar' },
   { to: '/imoveis?categoria=comercial', label: 'Comercial' },
   { to: '/imoveis?categoria=investimento', label: 'Investir' },
+  { to: '/praias', label: 'Praias' }, // Colecção Praias (terrenos em Inhambane e Vilankulo)
+  { to: '/procura', label: 'Procura-se' }, // pedidos de clientes
   { to: '/planos', label: 'Planos' },
 ];
 
@@ -96,9 +98,9 @@ export default function Header() {
           <Logo />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-1 xl:flex">
           {NAV.map((n) => {
-            const active = `${pathname}${search}` === n.to || (n.to === '/planos' && pathname === '/planos');
+            const active = n.to.includes('?') ? `${pathname}${search}` === n.to : pathname === n.to;
             return (
               <NavLink
                 key={n.label}
@@ -191,7 +193,7 @@ export default function Header() {
 
           <button
             onClick={() => setMobileOpen((o) => !o)}
-            className="grid h-10 w-10 place-items-center rounded-full text-white hover:bg-white/10 lg:hidden"
+            className="grid h-10 w-10 place-items-center rounded-full text-white hover:bg-white/10 xl:hidden"
             aria-label="Menu"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -200,7 +202,7 @@ export default function Header() {
       </div>
 
       {mobileOpen && (
-        <div className="max-h-[calc(100vh-4rem)] animate-fade overflow-y-auto border-t border-white/10 bg-navy-950 lg:hidden">
+        <div className="max-h-[calc(100vh-4rem)] animate-fade overflow-y-auto border-t border-white/10 bg-navy-950 xl:hidden">
           <div className="container-kh py-4">
             <div className="grid gap-1">
               {NAV.map((n) => (

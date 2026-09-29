@@ -31,7 +31,7 @@ import { useTitle } from '../hooks/useTitle';
 import MapView from '../components/MapView';
 import PropertyCard from '../components/PropertyCard';
 import QualificationModal from '../components/QualificationModal';
-import { FeaturedBadge, VerifiedBadge, btn } from '../components/ui';
+import { ContactLink, FeaturedBadge, VerifiedBadge, btn } from '../components/ui';
 import { FALLBACK_IMG } from '../data/images';
 import {
   cn,
@@ -440,17 +440,16 @@ export default function PropertyDetail() {
                 </div>
                 {contactOpen ? (
                   <div className="mt-5 space-y-2">
-                    <a href={`tel:${p.advertiser.phone.replace(/\s/g, '')}`} className={btn('navy', 'md', 'w-full')}>
+                    <ContactLink href={`tel:${p.advertiser.phone.replace(/\s/g, '')}`} className={btn('navy', 'md', 'w-full')}>
                       <Phone className="h-4 w-4" /> {p.advertiser.phone}
-                    </a>
-                    <a
+                    </ContactLink>
+                    <ContactLink
+                      newTab
                       href={waLink(p.advertiser.phone, `Olá! Vi o imóvel "${p.title}" na KEYHOUSE PROPERTIES e gostaria de mais informações.`)}
-                      target="_blank"
-                      rel="noreferrer"
                       className={btn('outline', 'md', 'w-full')}
                     >
                       <MessageCircle className="h-4 w-4" /> WhatsApp
-                    </a>
+                    </ContactLink>
                   </div>
                 ) : (
                   <div className="mt-5 rounded-2xl bg-ivory p-4">

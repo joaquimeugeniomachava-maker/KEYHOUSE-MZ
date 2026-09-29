@@ -31,6 +31,12 @@ export const IMG = {
   room2: px(7045354),
   yard1: px(9914005),
   yard2: px(38259276),
+  // Colecção Praias — imagens ILUSTRATIVAS das regiões (não são fotografias dos lotes)
+  barra: px(20097574),
+  tofo: px(20097576),
+  jangamo: px(20097585),
+  vilankulo: px(10294335),
+  dhowSunset: px(7433811),
 };
 
 export const FALLBACK_IMG = IMG.apartment;

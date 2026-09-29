@@ -2,6 +2,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import type {
   ConciergeRequest,
   Deal,
+  Demand,
+  DemandProposal,
   Lead,
   Payment,
   Property,
@@ -20,6 +22,7 @@ import {
   SEED_SEARCHES,
   SEED_VISITS,
 } from '../data/seed';
+import { SEED_DEMANDS } from '../data/demands';
 import { uid } from '../lib/utils';
 
 interface Data {
@@ -34,6 +37,8 @@ interface Data {
   unlocked: string[];
   subscription: Subscription | null;
   concierge: ConciergeRequest[];
+  demands: Demand[];
+  proposals: DemandProposal[];
 }
 
 const KEY = 'keyhouse-properties:v1';
@@ -50,6 +55,8 @@ const fresh = (): Data => ({
   unlocked: [],
   subscription: null,
   concierge: SEED_CONCIERGE,
+  demands: SEED_DEMANDS,
+  proposals: [],
 });
 
 function load(): Data {
@@ -82,6 +89,8 @@ interface Store extends Data {
   updateConcierge: (id: string, patch: Partial<ConciergeRequest>) => void;
   updatePayment: (id: string, patch: Partial<Payment>) => void;
   applyPayment: (p: Payment) => void;
+  addDemand: (d: Demand) => void;
+  addProposal: (p: DemandProposal) => void;
   resetDemo: () => void;
 }
 
@@ -95,7 +104,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem(KEY, JSON.stringify(data));
     } catch {
-      // Quota excedida (fotos carregadas): persiste sem as imagens em base64
+      // Quota excedida (fotos carregadas): guarda sem as imagens em base64
       try {
         const lite = {
           ...data,
@@ -220,6 +229,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const addDemand = useCallback((d: Demand) => setData((s) => ({ ...s, demands: [d, ...s.demands] })), []);
+  const addProposal = useCallback(
+    (p: DemandProposal) => setData((s) => ({ ...s, proposals: [p, ...s.proposals] })),
+    [],
+  );
+
   const resetDemo = useCallback(() => {
     try {
       localStorage.removeItem(KEY);
@@ -251,6 +266,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updateConcierge,
       updatePayment,
       applyPayment,
+      addDemand,
+      addProposal,
       resetDemo,
     }),
     [
@@ -273,6 +290,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updateConcierge,
       updatePayment,
       applyPayment,
+      addDemand,
+      addProposal,
       resetDemo,
     ],
   );

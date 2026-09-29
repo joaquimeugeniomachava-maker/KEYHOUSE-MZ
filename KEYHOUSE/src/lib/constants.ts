@@ -4,11 +4,11 @@ export const BRAND = {
   name: 'KEYHOUSE PROPERTIES',
   short: 'KEYHOUSE',
   /** WhatsApp OFICIAL da KEYHOUSE — só dígitos, com 258 à frente (ex.: '258841234567'). Vazio = ainda por configurar. */
-  whatsapp: '',
+  whatsapp: '258844898420',
   /** Como o número aparece no rodapé (ex.: '+258 84 123 4567'). */
-  whatsappDisplay: '',
+  whatsappDisplay: '+258 84 489 8420',
   /** Email oficial (ex.: 'geral@keyhouse.co.mz'). Vazio = não aparece no site. */
-  email: '',
+  email: 'Joaquim.Machava@outlook.com',
   address: 'Av. Julius Nyerere, Polana — Maputo',
 };
 
